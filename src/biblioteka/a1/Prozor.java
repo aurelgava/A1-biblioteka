@@ -398,7 +398,10 @@ public class Prozor extends javax.swing.JFrame {
             );  
             
             ChartPanel CP = new ChartPanel(chart);
- 
+            //Ova naredba brise prethodno dodate chartove u panelu. Bez te naredbe bi se, 
+            //svaki put kad kliknemo na dugme prikazi dodavali novi chartovi u panel.
+            //Ovaj bag sam primetio nakon sto sam snimio video...
+            jPanel4.removeAll(); 
             jPanel4.add(CP,BorderLayout.CENTER);
             jPanel4.validate();
              //***************************GRAFIKON***************************
