@@ -4,6 +4,7 @@
  */
 package biblioteka.a1;
 import java.awt.BorderLayout;
+import java.awt.event.KeyEvent;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -76,6 +77,8 @@ public class Prozor extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -88,6 +91,12 @@ public class Prozor extends javax.swing.JFrame {
         jLabel4.setText("Prezime");
 
         jLabel5.setText("Adresa");
+
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField1KeyPressed(evt);
+            }
+        });
 
         jButton1.setText("Upiši čitaoca");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -289,15 +298,25 @@ public class Prozor extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Pregled iznajmljivanja", jPanel2);
 
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jTextArea1.setText("Za ovaj zadatak potrebno je dodati biblioteke: UCanAccess (veza sa bazom podataka) i JFreeChart (crtanje grafika). \nU BibliotekaA1 klasi (main klasa), nalazi se URL_BAZE koje sadrži putanju do baze podataka i setVisible(true) sto omogućava prikaz naše aplikacije. \nU Prozor klasi (Frame formi) nalaze se 1 TabbedPane,  4 Panel-a, 4 Button-a, 1 ComboBox, 2 Spinner-a, 2 Table, 2 ScrollPane-a, 9 Label-a i 5 TextField-a. \nPomocu private void populate() vrši se povezivanje tabele sa odgovarajućom bazom podataka i prikaz tih podataka u toku rada aplikacie. \nPolje c tipa Connection i polje s tipa Statement povezuju aplikaciju sa bazom podataka. A pomoću rs polja tipa ResultSet, izvršava SQL upit koji služi za prikazivanje \nodgovarajućih podataka u tabeli. Tabelu popunjavamo sa DefaultTableModel dm i njegovim metodama u okviru private void populate () metode. Klikom na dugme za \nbrisanje, vrši se brisanje izabranog reda iz tabele i takođe iz baze podataka. Polja int, rbr i šifra pamte izabrane vrednosti iz tabele, uspostavlja se ponovo konekcija sa \nbazom, kao i u metodi private void populate() i PreparedStatement ps izvršava se SQL upit za brisanje podataka. Dodavanje podataka u tabelu vrši se preko jComboBox-a,\n na istom principu kao i generalno popunjavanje tabele u prošloj klasi.Nakon biranja vrednosti u Spinner-u i u jComboBox-u, klikom na dugme popunjava se tabela sa \nodgovarajucim podacima i prikazuje se grafik u zavisnosti od izabranih vrednosti. To radi private void jButton1ActionPerformed metoda. U njoj takođe Connection c vrši \npovezivanje sa bazom. PreparedStatement ps pomoću SQL upita pamti odgovarajuće podatke, koji sa DefaultTableModel dm i njenim metodama upisuju u tabelu. \nCrtanje grafika radi JFreeChart biblioteka. DefaultCategoryDataset dataset i jPanel1.setLayout pripremaju jPanel za crtanje grafika i crtanje se dešava ostalim metodama \nkoja se nalaze u okviru ove biblioteke.Cela aplikacija se zatvara klikom na dugme i njenom metodom System.exit(0).");
+        jScrollPane3.setViewportView(jTextArea1);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 944, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 938, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 397, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("O aplikaciji", jPanel3);
@@ -418,6 +437,36 @@ public class Prozor extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
+        try{
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+            boolean daLiPostoji=false;
+            for(int i=0; i<jTable1.getRowCount(); i++){
+                if( Integer.parseInt(jTextField1.getText()) ==   (int)jTable1.getValueAt(i, 0)    ){
+                    jTextField2.setText( jTable1.getValueAt(i, 1).toString() );
+                    jTextField3.setText( jTable1.getValueAt(i, 2).toString() );
+                    jTextField4.setText( jTable1.getValueAt(i, 3).toString() );
+                    jTextField5.setText( jTable1.getValueAt(i, 4).toString() );
+                    jTable1.setRowSelectionInterval(i, i);
+                    daLiPostoji = true;
+                }
+            }
+            if(!daLiPostoji){
+                jTextField1.setText("");
+                jTextField2.setText("");
+                jTextField3.setText("");
+                jTextField4.setText("");
+                jTextField5.setText("");
+                jTable1.clearSelection();
+            }
+        }
+        }catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(this, "Sifra sme da sadrzi samo cifre", "Greska", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(Prozor.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+    }//GEN-LAST:event_jTextField1KeyPressed
+
     /**
      * @param args the command line arguments
      */
@@ -476,11 +525,13 @@ public class Prozor extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JSpinner jSpinner2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
